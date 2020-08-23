@@ -1,0 +1,19 @@
+{% extends "diskapp/base.html" %}
+
+{% block title %}Confirm Delete{% endblock title %}
+
+{%  block content %}
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <p>Are you sure you want to delete "{{ host.name }}"?</p>
+
+        <input type="checkbox" id="delete_disks" name="delete_disks" value="yes">
+        <label for="delete_disks">Also delete host disks?</label><br>
+
+        <input type="submit" value="Confirm">
+    </form>
+
+{%  endblock content %}

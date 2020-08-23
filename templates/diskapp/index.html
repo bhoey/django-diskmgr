@@ -1,0 +1,128 @@
+{% extends "diskapp/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block extra_head_css %}
+    <style>
+        table.disks > thead > tr > th {
+            text-align: center;
+        }
+        table.disks > tbody > tr > td {
+            text-align: center;
+        }
+    </style>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+{% endblock extra_head_css %}
+
+{% block content %}
+    <h2>Disks</h2>
+    <table class="table table-hover disks">
+        <thead>
+            <tr>
+                <th>Host</th>
+                <th>Size (GB)</th>
+                <th>Serial Num</th>
+                <th>Interface</th>
+                <th>Purpose</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if hosts %}
+            {% comment %}
+                Show disks assigned to hosts first, then unassigned ones
+            {% endcomment %}
+            {% for host in hosts %}
+                {% for disk in host.host_disks.all %}
+                    <tr>
+                        <td class="host">
+                            {{ host }}
+                        </td>
+                        <td class="size">
+                            {{ disk.size_gb }}
+                        </td>
+                        <td class="serial">
+                            {{ disk.serial_no }}
+                        </td>
+                        <td class="interface">
+                            {{ disk.interface }}
+                        </td>
+                        <td class="purpose">
+                            {{ disk.purpose }}
+                        </td>
+                        <td class="buttons">
+                            <a href="/disk/edit/{{ disk.pk }}"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="/disk/delete/{{ disk.pk }}"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+        {% if no_host_disks %}
+            {% for disk in no_host_disks %}
+                <tr>
+                    <td class="host">
+                        -
+                    </td>
+                    <td class="size">
+                        {{ disk.size_gb }}
+                    </td>
+                    <td class="serial">
+                        {{ disk.serial_no }}
+                    </td>
+                    <td class="interface">
+                        {{ disk.interface }}
+                    </td>
+                    <td class="purpose">
+                        {{ disk.purpose }}
+                    </td>
+                    <td class="buttons">
+                        <a href="/disk/edit/{{ disk.pk }}"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="/disk/delete/{{ disk.pk }}"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <a href="/disk/add">
+            <button class="rounded-pill">Add New Disk</button>
+        </a>
+    </div>
+
+
+    <hr>
+    <h2>Hosts </h2>
+    <table class="table table-hover disks">
+        <thead>
+            <tr>
+                <th>Host</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if hosts %}
+            {% for host in hosts %}
+                <tr>
+                    <td class="hostname">
+                        {{ host }}
+                    </td>
+                    <td class="buttons">
+                        <a href="/host/edit/{{ host.pk }}"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="/host/delete/{{ host.pk }}"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <a href="/host/add">
+            <button class="rounded-pill">Add New Host</button>
+        </a>
+    </div>
+
+{% endblock content %}
